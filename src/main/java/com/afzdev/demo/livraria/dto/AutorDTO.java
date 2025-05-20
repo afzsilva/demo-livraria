@@ -2,6 +2,8 @@ package com.afzdev.demo.livraria.dto;
 
 public class AutorDTO {
 
+    private Long id;
+
     private String nome;
 
     public String getNome() {
@@ -10,5 +12,14 @@ public class AutorDTO {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -1,5 +1,6 @@
 package com.afzdev.demo.livraria.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Autor implements Serializable {
     @Column(nullable = false, length = 100)
     private String nome;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Livro> livros = new HashSet<>();
 
