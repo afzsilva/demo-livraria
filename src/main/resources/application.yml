@@ -28,6 +28,6 @@ springdoc:
     path: /api-docs
     display-request-duration: true
   openapi:
-    title: 'API de Gerenciamento de Autores'
-    description: 'API RESTful para gerenciamento de dados de autores'
+    title: 'API de Gerenciamento de Livros'
+    description: 'API RESTful para gerenciamento de dados de livros e seus autores e generos'
     version: '1.0.0'
