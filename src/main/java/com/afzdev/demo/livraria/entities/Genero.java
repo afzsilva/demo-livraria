@@ -3,6 +3,8 @@ package com.afzdev.demo.livraria.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,11 +18,18 @@ public class Genero implements Serializable {
     @Column(nullable = false, length = 50, unique = true)
     private String nome;
 
+    @OneToMany(mappedBy = "genero", cascade = CascadeType.ALL)
+    private List<Livro> livros = new ArrayList<>();
+
     public Genero() {
     }
 
     public Long getId() {
         return id;
+    }
+
+    public List<Livro> getLivros() {
+        return livros;
     }
 
     public void setId(Long id) {

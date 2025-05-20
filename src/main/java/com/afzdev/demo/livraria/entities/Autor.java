@@ -3,7 +3,9 @@ package com.afzdev.demo.livraria.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "autores")
@@ -15,6 +17,9 @@ public class Autor implements Serializable {
 
     @Column(nullable = false, length = 100)
     private String nome;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Livro> livros = new HashSet<>();
 
     public Autor() {}
 
@@ -29,6 +34,10 @@ public class Autor implements Serializable {
 
     public String getNome() {
         return nome;
+    }
+
+    public Set<Livro> getLivros() {
+        return livros;
     }
 
     public void setNome(String nome) {

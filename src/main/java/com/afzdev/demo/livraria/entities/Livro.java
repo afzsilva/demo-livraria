@@ -16,9 +16,25 @@ public class Livro implements Serializable {
     @Column(nullable = false, length = 200)
     private String titulo;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "genero_id", nullable = false)
+    private Genero genero;
+
     public Livro() {}
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
 
     public Long getId() {
         return id;
@@ -55,4 +71,6 @@ public class Livro implements Serializable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
 }
