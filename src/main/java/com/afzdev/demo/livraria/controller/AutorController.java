@@ -1,5 +1,6 @@
 package com.afzdev.demo.livraria.controller;
 
+import com.afzdev.demo.livraria.controller.api.AutorControllerApi;
 import com.afzdev.demo.livraria.dto.AutorDTO;
 import com.afzdev.demo.livraria.service.AutorService;
 import jakarta.validation.Valid;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/autores")
-public class AutorController {
+public class AutorController implements AutorControllerApi {
 
     private final AutorService autorService;
 
