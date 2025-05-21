@@ -1,6 +1,6 @@
 package com.afzdev.demo.livraria.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -21,7 +21,7 @@ public class Genero implements Serializable {
 
 
     @OneToMany(mappedBy = "genero", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonIgnore
     private List<Livro> livros = new ArrayList<>();
 
     public Genero() {

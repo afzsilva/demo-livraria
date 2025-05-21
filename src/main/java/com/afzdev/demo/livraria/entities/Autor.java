@@ -19,8 +19,8 @@ public class Autor implements Serializable {
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Livro> livros = new HashSet<>();
 
     public Autor() {}
@@ -40,6 +40,10 @@ public class Autor implements Serializable {
 
     public Set<Livro> getLivros() {
         return livros;
+    }
+
+    public void setLivros(Set<Livro> livros) {
+        this.livros = livros;
     }
 
     public void setNome(String nome) {
