@@ -1,5 +1,6 @@
 package com.afzdev.demo.livraria.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,7 +19,9 @@ public class Genero implements Serializable {
     @Column(nullable = false, length = 50, unique = true)
     private String nome;
 
+
     @OneToMany(mappedBy = "genero", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Livro> livros = new ArrayList<>();
 
     public Genero() {
@@ -30,6 +33,10 @@ public class Genero implements Serializable {
 
     public List<Livro> getLivros() {
         return livros;
+    }
+
+    public void setLivros(List<Livro> livros) {
+        this.livros = livros;
     }
 
     public void setId(Long id) {
