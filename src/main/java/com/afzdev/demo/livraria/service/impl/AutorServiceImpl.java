@@ -24,6 +24,7 @@ public class AutorServiceImpl implements AutorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AutorDTO> listarTodos() {
         return autorRepository.findAll().stream()
                 .map(autor -> autorMapper.toDTO(autor))
@@ -31,8 +32,8 @@ public class AutorServiceImpl implements AutorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<AutorDTO> buscarPorId(Long id) {
-
         return Optional.of(autorMapper.toDTO(autorRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Não foi encontrado Autor com id : "+id))));
     }

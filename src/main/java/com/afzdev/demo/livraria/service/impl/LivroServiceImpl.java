@@ -24,23 +24,27 @@ public class LivroServiceImpl implements LivroService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LivroDTO> listarTodos() {
         return livroRepository.findAll().stream().map(livro -> livroMapper.toDTO(livro)).toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<LivroDTO> buscarPorId(Long id) {
         return Optional.of( livroMapper.toDTO(livroRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("Não foi encontrado Livro com id : "+id))));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LivroDTO> buscarPorAutor(Long autorId) {
         return livroRepository.findByAutorId(autorId).stream()
                 .map(livro -> livroMapper.toDTO(livro)).toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LivroDTO> buscarPorGenero(Long generoId) {
         return livroRepository.findByGeneroId(generoId).stream()
                 .map(livro -> livroMapper.toDTO(livro)).toList();
