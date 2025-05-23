@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/generos")
+@RequestMapping("/api/v1/generos")
 public class GeneroController implements GeneroControllerApi {
 
     private final GeneroService generoService;

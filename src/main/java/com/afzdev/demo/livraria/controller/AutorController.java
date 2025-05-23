@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/autores")
+@RequestMapping("/api/v1/autores")
 public class AutorController implements AutorControllerApi {
 
     private final AutorService autorService;
