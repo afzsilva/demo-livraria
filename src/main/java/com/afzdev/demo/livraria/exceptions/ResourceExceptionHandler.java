@@ -14,11 +14,17 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(DataBaseException.class)
     public ResponseEntity<ProblemDetail> SqlExceptionHelperDuplicateEntry (DataBaseException e, WebRequest request){
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getLocalizedMessage());
         problemDetail.setTitle("Database Exception");
         problemDetail.setProperty("Hora da ocorrencia", Instant.now());
         return ResponseEntity.ok(problemDetail);
     }
 
-
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ProblemDetail> entityNotFound(ResourceNotFoundException e, WebRequest request){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
+        problemDetail.setTitle("Registro Inexistente");
+        problemDetail.setProperty("Hora da ocorrencia", Instant.now());
+        return ResponseEntity.ok(problemDetail);
+    }
 }
