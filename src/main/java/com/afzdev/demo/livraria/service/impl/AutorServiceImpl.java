@@ -66,7 +66,7 @@ public class AutorServiceImpl implements AutorService {
     public void excluir(Long id) {
         try{
             if (!autorRepository.existsById(id)){
-                throw new ResourceNotFoundException("Não foi encontrado Autor com id ao tentar excluir: "+id);
+                throw new ResourceNotFoundException("Não foi encontrado Autor com "+id +" ao tentar excluir");
             }
             autorRepository.deleteById(id);
         }catch (

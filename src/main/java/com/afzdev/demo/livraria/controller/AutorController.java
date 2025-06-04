@@ -22,6 +22,7 @@ public class AutorController implements AutorControllerApi {
         this.autorService = autorService;
     }
 
+    //TODO add paginação
     @GetMapping
     public ResponseEntity<List<AutorDTO>> listarTodos() {
         List<AutorDTO> autores = autorService.listarTodos();
