@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/autores")
@@ -31,9 +30,8 @@ public class AutorController implements AutorControllerApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<AutorDTO> buscarPorId(@PathVariable Long id) {
-        Optional<AutorDTO> autor = autorService.buscarPorId(id);
-        return autor.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        AutorDTO autor = autorService.buscarPorId(id);
+        return ResponseEntity.ok(autor);
     }
 
     @PostMapping
@@ -43,20 +41,11 @@ public class AutorController implements AutorControllerApi {
 
     @PutMapping("/{id}")
     public ResponseEntity<AutorDTO> atualizar(@PathVariable Long id, @Valid @RequestBody AutorDTO autor) {
-
-        if (!autorService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        autor.setId(id);
-        AutorDTO autorAtualizado = autorService.salvar(autor);
-        return ResponseEntity.ok(autorAtualizado);
+        return ResponseEntity.ok(autorService.atualizar(id,autor));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        if (!autorService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
         autorService.excluir(id);
         return ResponseEntity.noContent().build();
     }
