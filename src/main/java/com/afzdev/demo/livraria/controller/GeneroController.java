@@ -24,6 +24,7 @@ public class GeneroController implements GeneroControllerApi {
         this.generoService = generoService;
     }
 
+    //TODO add paginação
     @GetMapping
     public ResponseEntity<List<GeneroDTO>> listarTodos() {
         List<GeneroDTO> generos = generoService.listarTodos();
@@ -32,9 +33,8 @@ public class GeneroController implements GeneroControllerApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<GeneroDTO> buscarPorId(@PathVariable Long id) {
-        Optional<GeneroDTO> genero = generoService.buscarPorId(id);
-        return genero.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        GeneroDTO genero = generoService.buscarPorId(id);
+        return ResponseEntity.ok(genero);
     }
 
     @PostMapping
@@ -44,20 +44,12 @@ public class GeneroController implements GeneroControllerApi {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GeneroDTO> atualizar(@PathVariable Long id, @Valid @RequestBody GeneroDTO genero) {
-        if (!generoService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        genero.setId(id);
-        GeneroDTO generoAtualizado = generoService.salvar(genero);
-        return ResponseEntity.ok(generoAtualizado);
+    public ResponseEntity<GeneroDTO> atualizar(@PathVariable Long id, @Valid @RequestBody GeneroDTO generoDTO) {
+       return ResponseEntity.ok(generoService.atualizar(id,generoDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        if (!generoService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
         generoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
