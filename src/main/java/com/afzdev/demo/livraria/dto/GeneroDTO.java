@@ -10,6 +10,14 @@ public class GeneroDTO {
         return nome;
     }
 
+    public GeneroDTO() {
+    }
+
+    public GeneroDTO(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }

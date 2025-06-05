@@ -10,6 +10,13 @@ public class LivroDTO {
     public LivroDTO() {
     }
 
+    public LivroDTO(Long id, String titulo, AutorDTO autor, GeneroDTO genero) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.genero = genero;
+    }
+
     public Long getId() {
         return id;
     }

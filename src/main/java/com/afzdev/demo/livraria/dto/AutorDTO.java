@@ -6,6 +6,11 @@ public class AutorDTO {
 
     private String nome;
 
+    public AutorDTO(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     public String getNome() {
         return nome;
     }
