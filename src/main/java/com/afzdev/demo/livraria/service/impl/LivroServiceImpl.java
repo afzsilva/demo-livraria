@@ -1,28 +1,39 @@
 package com.afzdev.demo.livraria.service.impl;
 
 import com.afzdev.demo.livraria.dto.LivroDTO;
+import com.afzdev.demo.livraria.entities.Livro;
+import com.afzdev.demo.livraria.exceptions.DataBaseException;
+import com.afzdev.demo.livraria.exceptions.ResourceNotFoundException;
+import com.afzdev.demo.livraria.mapper.AutorMapper;
+import com.afzdev.demo.livraria.mapper.GeneroMapper;
 import com.afzdev.demo.livraria.mapper.LivroMapper;
 import com.afzdev.demo.livraria.repository.LivroRepository;
 import com.afzdev.demo.livraria.service.LivroService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LivroServiceImpl implements LivroService {
 
     private final LivroRepository livroRepository;
     private final LivroMapper livroMapper;
+    private final GeneroMapper generoMapper;
+    private final AutorMapper autorMapper;
 
     @Autowired
-    public LivroServiceImpl(LivroRepository livroRepository, LivroMapper livroMapper) {
+    public LivroServiceImpl(LivroRepository livroRepository, LivroMapper livroMapper, GeneroMapper generoMapper, AutorMapper autorMapper) {
         this.livroRepository = livroRepository;
         this.livroMapper = livroMapper;
+        this.generoMapper = generoMapper;
+        this.autorMapper = autorMapper;
     }
 
+    //TODO add paginação
     @Override
     @Transactional(readOnly = true)
     public List<LivroDTO> listarTodos() {
@@ -31,9 +42,10 @@ public class LivroServiceImpl implements LivroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<LivroDTO> buscarPorId(Long id) {
-        return Optional.of( livroMapper.toDTO(livroRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Não foi encontrado Livro com id : "+id))));
+    public LivroDTO buscarPorId(Long id) {
+        return livroRepository.findById(id)
+                .map(livroMapper::toDTO)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi encontrado Livro com id : "+id));
     }
 
     @Override
@@ -57,13 +69,34 @@ public class LivroServiceImpl implements LivroService {
     }
 
     @Override
-    @Transactional
-    public void excluir(Long id) {
-        livroRepository.deleteById(id);
+    public LivroDTO atualizar(Long id, LivroDTO livroDTO) {
+        try {
+            Livro livro = livroRepository.getReferenceById(id);
+            updateToEntity(livroDTO,livro);
+            return livroMapper.toDTO(livroRepository.save(livro));
+        }catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Não foi encontrado Livro com id : "+id);
+        }
     }
 
     @Override
-    public boolean existePorId(Long id) {
-        return livroRepository.existsById(id);
+    @Transactional
+    public void excluir(Long id) {
+        try{
+            if (!livroRepository.existsById(id)){
+                throw new ResourceNotFoundException("Não foi encontrado Livro com "+id+" ao tentar excluir");
+            }
+            livroRepository.deleteById(id);
+        }catch (
+                DataIntegrityViolationException e){
+            throw new DataBaseException("Falha de integridade referencial");
+        }
+    }
+
+    //auxiliares
+    private void updateToEntity(LivroDTO dto, Livro entity){
+        entity.setTitulo(dto.getTitulo());
+        entity.setGenero(generoMapper.toENTITY(dto.getGenero()));
+        entity.setAutor(autorMapper.toENTITY(dto.getAutor()));
     }
 }
