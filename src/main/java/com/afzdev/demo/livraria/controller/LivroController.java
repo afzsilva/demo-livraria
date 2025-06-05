@@ -23,6 +23,7 @@ public class LivroController implements LivroControllerApi {
         this.livroService = livroService;
     }
 
+    //TODO add paginação
     @GetMapping
     public ResponseEntity<List<LivroDTO>> listarTodos() {
         List<LivroDTO> livros = livroService.listarTodos();
@@ -31,9 +32,7 @@ public class LivroController implements LivroControllerApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<LivroDTO> buscarPorId(@PathVariable Long id) {
-        Optional<LivroDTO> livro = livroService.buscarPorId(id);
-        return livro.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(livroService.buscarPorId(id));
     }
 
     @GetMapping("/autor/{autorId}")
@@ -55,20 +54,12 @@ public class LivroController implements LivroControllerApi {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LivroDTO> atualizar(@PathVariable Long id, @Valid @RequestBody LivroDTO livro) {
-        if (!livroService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        livro.setId(id);
-        LivroDTO livroAtualizado = livroService.salvar(livro);
-        return ResponseEntity.ok(livroAtualizado);
+    public ResponseEntity<LivroDTO> atualizar(@PathVariable Long id, @Valid @RequestBody LivroDTO livroDTO) {
+        return ResponseEntity.ok(livroService.atualizar(id,livroDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        if (!livroService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
         livroService.excluir(id);
         return ResponseEntity.noContent().build();
     }
