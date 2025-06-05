@@ -2,7 +2,6 @@ package com.afzdev.demo.livraria.service.impl;
 
 import com.afzdev.demo.livraria.dto.LivroDTO;
 import com.afzdev.demo.livraria.entities.Livro;
-import com.afzdev.demo.livraria.exceptions.DataBaseException;
 import com.afzdev.demo.livraria.exceptions.ResourceNotFoundException;
 import com.afzdev.demo.livraria.mapper.AutorMapper;
 import com.afzdev.demo.livraria.mapper.GeneroMapper;
@@ -11,11 +10,11 @@ import com.afzdev.demo.livraria.repository.LivroRepository;
 import com.afzdev.demo.livraria.service.LivroService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LivroServiceImpl implements LivroService {
@@ -82,15 +81,11 @@ public class LivroServiceImpl implements LivroService {
     @Override
     @Transactional
     public void excluir(Long id) {
-        try{
-            if (!livroRepository.existsById(id)){
-                throw new ResourceNotFoundException("Não foi encontrado Livro com "+id+" ao tentar excluir");
-            }
-            livroRepository.deleteById(id);
-        }catch (
-                DataIntegrityViolationException e){
-            throw new DataBaseException("Falha de integridade referencial");
+        Optional<Livro> livro = livroRepository.findById(id);
+        if (livro.isEmpty()) {
+            throw new ResourceNotFoundException("Não foi encontrado Livro com id : " + id);
         }
+        livroRepository.deleteById(id);
     }
 
     //auxiliares
